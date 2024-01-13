@@ -1,0 +1,137 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 25, 2023 at 02:44 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `lms`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leaves`
+--
+
+CREATE TABLE `leaves` (
+  `leaveID` int(11) NOT NULL,
+  `leaveType` enum('Casual leave','Sick leave','Maternity leave','Annual leave') NOT NULL,
+  `from` date NOT NULL,
+  `till` date NOT NULL,
+  `reason` varchar(500) NOT NULL,
+  `status` enum('Pending','Approved','Declined') NOT NULL DEFAULT 'Pending',
+  `mID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `leaves`
+--
+
+INSERT INTO `leaves` (`leaveID`, `leaveType`, `from`, `till`, `reason`, `status`, `mID`) VALUES
+(13, 'Casual leave', '2023-08-20', '2023-08-23', 'test', 'Declined', 10),
+(14, 'Sick leave', '2023-08-20', '2023-08-22', 'test', 'Declined', 4),
+(15, 'Maternity leave', '2023-08-20', '2023-08-26', 'test', 'Declined', 4),
+(16, 'Sick leave', '2023-08-20', '2023-08-25', 'test', 'Declined', 4),
+(17, 'Casual leave', '2023-08-20', '2023-08-26', 'test', 'Declined', 4),
+(18, 'Casual leave', '2023-08-20', '2023-08-25', 'test', 'Declined', 4),
+(19, 'Annual leave', '2023-08-25', '2023-08-30', 'test2', 'Approved', 4),
+(20, 'Maternity leave', '2023-08-26', '2023-08-29', 'test', 'Declined', 10),
+(21, 'Casual leave', '2023-08-29', '2023-08-31', 'test2', 'Approved', 10),
+(22, 'Annual leave', '2023-08-20', '2023-08-24', 'test', 'Approved', 10),
+(23, 'Casual leave', '2023-08-20', '2023-08-22', 'test', 'Approved', 4),
+(24, 'Maternity leave', '2023-08-20', '2023-08-31', 'test', 'Approved', 5),
+(25, 'Casual leave', '2023-08-31', '2023-09-07', 'test', 'Pending', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `member`
+--
+
+CREATE TABLE `member` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `gender` enum('Male','Female') NOT NULL,
+  `age` int(11) NOT NULL,
+  `contact` varchar(100) NOT NULL,
+  `position` enum('Software Engineer','Web Developer','QA Tester','Graphic Designer','Project Manager') DEFAULT NULL,
+  `salary` int(11) DEFAULT NULL,
+  `joinDate` date NOT NULL DEFAULT current_timestamp(),
+  `role` enum('Admin','Employee') NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `image` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `member`
+--
+
+INSERT INTO `member` (`id`, `name`, `gender`, `age`, `contact`, `position`, `salary`, `joinDate`, `role`, `password`, `image`) VALUES
+(2, 'Sihama', 'Female', 23, 'sihama@gmail.com', NULL, NULL, '2023-06-28', 'Admin', 'admin', NULL),
+(3, 'Tanjela', 'Female', 23, 'tanjela@gmail.com', NULL, NULL, '2023-06-28', 'Admin', 'admin', NULL),
+(4, 'Adam', 'Male', 33, 'adam@gmail.com', 'Software Engineer', 100000, '2023-06-27', 'Employee', 'emp', NULL),
+(5, 'Eve', 'Female', 33, 'eve@gmail.com', 'QA Tester', 60000, '2023-06-27', 'Employee', 'emp', NULL),
+(10, 'Alex', 'Male', 22, 'alex@gmail.com', 'Graphic Designer', 50000, '2023-06-27', 'Employee', 'emp', 'img/pexels-photo-6985136.jpeg'),
+(17, 'Mars', 'Male', 24, 'mars@gmail.com', NULL, NULL, '2023-08-19', 'Admin', 'admin', 'img/pexels-photo-6985136.jpeg');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `leaves`
+--
+ALTER TABLE `leaves`
+  ADD PRIMARY KEY (`leaveID`),
+  ADD KEY `m_fk` (`mID`);
+
+--
+-- Indexes for table `member`
+--
+ALTER TABLE `member`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `leaves`
+--
+ALTER TABLE `leaves`
+  MODIFY `leaveID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `member`
+--
+ALTER TABLE `member`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `leaves`
+--
+ALTER TABLE `leaves`
+  ADD CONSTRAINT `m_fk` FOREIGN KEY (`mID`) REFERENCES `member` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
